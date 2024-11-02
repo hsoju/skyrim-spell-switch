@@ -80,6 +80,7 @@ bool inputs_tracked = false;
 
 bool SetupFavoritesTracker();
 bool SetupEquipTracker();
+bool SetupSettings();
 
 void MessageHandler(SKSE::MessagingInterface::Message* a_msg)
 {
@@ -141,7 +142,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	serialization->SetSaveCallback(Serialization::SaveCallback);
 	serialization->SetLoadCallback(Serialization::LoadCallback);
 	serialization->SetRevertCallback(Serialization::RevertCallback);
-	return SetupEquipTracker();
+	return SetupSettings() && SetupEquipTracker();
 }
 
 extern "C" DLLEXPORT constinit auto SKSEPlugin_Version = []() noexcept {

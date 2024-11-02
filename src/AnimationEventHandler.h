@@ -50,6 +50,7 @@ public:
 
 	void ResetHasCast(bool use_left_hand);
 
+	void ToggleSpell(bool use_left_hand);
 	void SwitchSpell(bool use_left_hand, int num_casts);
 	
 	void CheckInitialRightCast(RE::TESForm* next_spell, RE::SpellItem* spell_object);
@@ -64,7 +65,6 @@ public:
 	void CheckFireForgetLeftSwitch();
 	void CheckFireForgetSwitch(bool use_left_hand);
 	void CheckConcentrationSwitch();
-
 
 	void CheckAnimation(std::string& animation_event);
 

@@ -9,11 +9,12 @@
   "features": {
     "plugin": {
       "description": "Build the SKSE plugin.",
-      "dependencies": [
-        "commonlibsse-ng",
-        "directxtk",
-        "nlohmann-json"
-      ]
+        "dependencies": [
+            "commonlibsse-ng",
+            "directxtk",
+            "nlohmann-json",
+            "simpleini"
+        ]
     }
   },
   "default-features": [ "plugin" ],

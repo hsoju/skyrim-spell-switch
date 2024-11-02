@@ -5,7 +5,7 @@
 #include "InputEventHandler.h"
 #include "MenuHandler.h"
 #include "SwitchManager.h"
-
+#include "SettingsManager.h"
 
 auto animation_handler = AnimationEventHandler::GetSingleton();
 
@@ -41,5 +41,10 @@ bool SetupFavoritesTracker()
 {
 	MenuHandler::Register();
 	InputEventHandler::Register();
+	return true;
+}
+
+bool SetupSettings() {
+	SettingsManager::GetSingleton()->ImportSettings();
 	return true;
 }

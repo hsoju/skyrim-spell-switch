@@ -25,6 +25,25 @@ void AnimationEventHandler::ResetHasCast(bool use_left_hand) {
 	}
 }
 
+void AnimationEventHandler::ToggleSpell(bool use_left_hand)
+{
+	auto player = RE::PlayerCharacter::GetSingleton();
+	if (player->IsInCombat()) {
+		auto state = player->AsActorState();
+		if (state && state->IsWeaponDrawn()) {
+			RE::TESForm* equipped_item = player->GetEquippedObject(use_left_hand);
+			if (equipped_item && equipped_item->GetFormType() == RE::FormType::Spell) {
+				if (use_left_hand) {
+					current_left_spell = equipped_item;
+				} else {
+					current_right_spell = equipped_item;
+				}
+				SwitchSpell(use_left_hand, 1);
+			}
+		}
+	}
+}
+
 void AnimationEventHandler::SwitchSpell(bool use_left_hand, int num_casts)
 {
 	auto player = RE::PlayerCharacter::GetSingleton();

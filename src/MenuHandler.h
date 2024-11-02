@@ -1,8 +1,9 @@
 #pragma once
 
-namespace MagicMenuTracker
+namespace MenuTracker
 {
-	bool is_menu_opened = false;
+	bool is_any_menu_opened = false;
+	bool is_magic_menu_opened = false;
 }
 
 class MenuHandler : public RE::BSTEventSink<RE::MenuOpenCloseEvent>
@@ -10,8 +11,12 @@ class MenuHandler : public RE::BSTEventSink<RE::MenuOpenCloseEvent>
 public:
 	virtual RE::BSEventNotifyControl ProcessEvent(const RE::MenuOpenCloseEvent* a_event, RE::BSTEventSource<RE::MenuOpenCloseEvent>*)
 	{
+		if (!a_event) {
+			return RE::BSEventNotifyControl::kContinue;
+		}
+		MenuTracker::is_any_menu_opened = a_event->opening;
 		if (a_event->menuName == RE::MagicMenu::MENU_NAME) {
-			MagicMenuTracker::is_menu_opened = a_event->opening;
+			MenuTracker::is_magic_menu_opened = a_event->opening;
 		}
 		return RE::BSEventNotifyControl::kContinue;
 	}

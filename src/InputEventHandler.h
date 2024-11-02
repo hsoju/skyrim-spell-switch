@@ -1,38 +1,33 @@
 #pragma once
 
+#include "AnimationEventHandler.h"
 #include "MenuHandler.h"
 #include "SwitchManager.h"
-
+#include "SettingsManager.h"
 
 class InputEventHandler : public RE::BSTEventSink<RE::InputEvent*>
 {
 public:
-	SwitchManager* manager = SwitchManager::GetSingleton();
+	AnimationEventHandler* animation_handler = AnimationEventHandler::GetSingleton();
+	SwitchManager* switch_manager = SwitchManager::GetSingleton();
+	SettingsManager* settings_manager = SettingsManager::GetSingleton();
+
+	void ProcessFavoritesInput(RE::InputEvent* const* a_event);
+	void ProcessToggleInput(RE::InputEvent* const* a_event);
 
 	virtual RE::BSEventNotifyControl ProcessEvent(RE::InputEvent* const* a_event, RE::BSTEventSource<RE::InputEvent*>*)
 	{
-		if (MagicMenuTracker::is_menu_opened) {
+		if (settings_manager->enable_input_switch && !MenuTracker::is_any_menu_opened) {
 			if (!a_event) {
 				return RE::BSEventNotifyControl::kContinue;
 			}
-			for (RE::InputEvent* given_input = *a_event; given_input; given_input = given_input->next) {
-				if (given_input->eventType.get() != RE::INPUT_EVENT_TYPE::kButton) {
-					continue;
-				}
-				const RE::ButtonEvent* given_button = given_input->AsButtonEvent();
-				if (given_button->IsPressed() || given_button->IsHeld()) {
-					continue;
-				}
-
-				const RE::IDEvent* given_id = given_input->AsIDEvent();
-				const auto& given_user = given_id->userEvent;
-				const auto user_events = RE::UserEvents::GetSingleton();
-
-				if (given_user == user_events->toggleFavorite || given_user == user_events->yButton) {
-					manager->ProcessFavoriteSpells();
-					break;
-				}
+			ProcessToggleInput(a_event);
+		}
+		if (MenuTracker::is_magic_menu_opened) {
+			if (!a_event) {
+				return RE::BSEventNotifyControl::kContinue;
 			}
+			ProcessFavoritesInput(a_event);
 		}
 		return RE::BSEventNotifyControl::kContinue;
 	}
